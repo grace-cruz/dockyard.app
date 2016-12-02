@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/dockyard-app":{"type":null,"mount_options":[],"guestpath":"/home/vagrant/dockyard-app","hostpath":"C:/Users/MichelleM/Documents/dockyard.app","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"C:/Users/MichelleM/Documents/dockyard.app","disabled":false,"__vagrantfile":true}}}
