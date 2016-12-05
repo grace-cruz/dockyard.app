@@ -9,6 +9,8 @@ confDir = $confDir ||= File.expand_path("vendor/laravel/homestead", File.dirname
 
 homesteadYamlPath = "Homestead.yaml"
 homesteadJsonPath = "Homestead.json"
+homesteadLocalYamlPath = "Homestead.local.yaml"
+homesteadLocalJsonPath = "Homestead.local.json"
 afterScriptPath = "after.sh"
 aliasesPath = "aliases"
 
@@ -25,6 +27,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         settings = YAML::load(File.read(homesteadYamlPath))
     elsif File.exist? homesteadJsonPath then
         settings = JSON.parse(File.read(homesteadJsonPath))
+    end
+
+    Homestead.configure(config, settings)
+
+    if File.exist? homesteadLocalYamlPath then
+        settings = YAML::load(File.read(homesteadLocalYamlPath))
+    elsif File.exist? homesteadLocalJsonPath then
+        settings = JSON.parse(File.read(homesteadLocalJsonPath))
     end
 
     Homestead.configure(config, settings)
