@@ -29,6 +29,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     Homestead.configure(config, settings)
 
+    if File.exist? homesteadLocalYamlPath then
+        settings = YAML::load(File.read(homesteadLocalYamlPath))
+    elsif File.exist? homesteadLocalJsonPath then
+        settings = JSON.parse(File.read(homesteadLocalJsonPath))
+    end
+
+    Homestead.configure(config, settings)
+
     if File.exist? afterScriptPath then
         config.vm.provision "shell", path: afterScriptPath, privileged: false
     end
