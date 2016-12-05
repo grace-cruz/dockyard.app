@@ -9,6 +9,8 @@ confDir = $confDir ||= File.expand_path("vendor/laravel/homestead", File.dirname
 
 homesteadYamlPath = "Homestead.yaml"
 homesteadJsonPath = "Homestead.json"
+homesteadLocalYamlPath = "Homestead.local.yaml"
+homesteadLocalJsonPath = "Homestead.local.json"
 afterScriptPath = "after.sh"
 aliasesPath = "aliases"
 
