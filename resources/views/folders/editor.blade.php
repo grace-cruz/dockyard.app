@@ -30,14 +30,15 @@
               </div>
 
               <div class="form-group{{ $errors->has('users[]') ? ' has-error' : '' }}">
-                <div class="col-md-8 col-md-offset-4">
-                  @foreach ($users as $user)
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="users[]" value="{{ $user->id }}" {{ old("users[$user->id]") || $folder->users->contains('id', $user->id) ? 'checked' : '' }}> {{ $user->name }}
-                        </label>
-                    </div>
-                  @endforeach
+                <label for="users[]" class="col-md-4 control-label">Users</label>
+                <div class="col-md-6">
+                  <select name="users[]" multiple class="col-md-1 user-select form-control"
+                  style="width: 100%" data-placeholder="Select users" data-theme="bootstrap">
+                    <option></option>
+                    @foreach ($users as $user)
+                      <option value="{{ $user->id }}" {{ old("users[$user->id]") || $folder->users->contains('id', $user->id) ? 'selected="selected"' : '' }}>{{ $user->name }}</option>
+                    @endforeach
+                  </select>
                 </div>
               </div>
 

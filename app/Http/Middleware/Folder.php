@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Vinkla\Hashids\Facades\Hashids;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,7 +18,8 @@ class Folder
     public function handle($request, Closure $next)
     {
         $user = Auth::user();
-        $folder=$request->folder_id;
+        $ids = Hashids::decode($request->folder_id);
+        $folder = !empty($ids) ? $ids[0] : 0;
         $folders = $user->folders;
 
         if(!$user->admin && !$folders->contains('id',$folder)) abort(403, 'Unauthorized action');

@@ -7,13 +7,14 @@ use App\Folder;
 use App\Http\Requests\UploadFile;
 use App\Download;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FileController extends Controller
 {
     public function fileUploader(Request $request,$folder_id)
     {
       $user = $request->user();
-      $folder=(new Folder)->findOrFail($folder_id);
+      $folder = (new Folder)->findOrFailByHashid($folder_id);
 
       return view('files.uploader',[
         'user'=> $user,
@@ -22,31 +23,50 @@ class FileController extends Controller
       ]);
     }
 
-    public function uploadFile(UploadFile $request,$folder_id)
-    {
-      $user=$request->user();
-      $folder=(new Folder)->findOrFail($folder_id);
-
-      //TODO
-      $timestamps = (new \DateTime)->format('YmdHisu');
-      $upload = $request->file('upload');
-      $path = $upload->storeAs('uploads',"$folder_id-$timestamps-$user->id");
-
+public function uploadFile(Request $request, $folder_id)
+{
+  $user = $request->user();
+  $ids = Hashids::decode($folder_id);
+  $id = !empty($ids) ? $ids[0] : 0;
+  $folder = (new Folder)->where('id', $id)->get()->first();
+  $uploads = $request->file('uploads');
+  $response = ['files' => []];
+  foreach ($uploads as $upload) {
+    $rules = array('upload' => 'required|file|mimes:pdf,docx,xlsx,ppt|max:30000');
+    $validator = Validator::make(array('upload'=> $upload), $rules);
+    $filename = $upload->getClientOriginalName();
+    if (!$folder->exists()) {
+      $response['files'][] = [
+      'name' => $filename,
+      'error' => 'Invalid folder'
+      ];
+    } elseif ($validator->passes()) {
+      list($usec, $sec) = explode(" ", microtime());
+      $timestamp = ((float)$usec + (float)$sec);
+      $path = $upload->storeAs('uploads',"$folder->id-$timestamp-$user->id");
       $file=new File;
       $file->path = $path;
-      $file->name = $upload->getClientOriginalName();
-      $file->folder_id = $folder_id;
+      $file->name = $filename;
+      $file->folder_id = $folder->id;
       $file->save();
-
-      $request->session()->flash('status','Files uploaded succesfully');
-      return redirect("/folders/$folder_id");
+      $response['files'][] = [
+      'name' => $filename
+      ];
+    } else {
+      $response['files'][] = (object) [
+      'name' => $filename,
+      'error' => $validator->errors()->first()
+      ];
     }
+  }
+  return response()->json($response);
+}
 
     public function downloadFile(Request $request,$folder_id,$file_id)
     {
       $user=$request->user();
-      $folder=(new Folder)->findOrFail($folder_id);
-      $file=(new File)->findOrFail($file_id);
+      $folder = (new Folder)->findOrFailByHashid($folder_id);
+      $file = (new File)->findOrFailByHashid($file_id);
 
       $download=new Download;
       $download->user_id = $user->id;
@@ -63,7 +83,7 @@ class FileController extends Controller
     public function downloadZip(Request $request,$folder_id)
     {
       $user=$request->user();
-      $folder=(new Folder)->findOrFail($folder_id);
+      $folder = (new Folder)->findOrFailByHashid($folder_id);
       //$file=(new File)->findOrFail($file_id);
 
       $download=new Download;
@@ -73,7 +93,7 @@ class FileController extends Controller
       $download->save();
 
       //Code for ZIP Download
-      $zipPath = storage_path().'/app/uploads/'.$folder_id.'-'.(new \DateTime)->format('YmdHisu').'-'.$user->id.'.zip';
+      $zipPath = storage_path().'/app/uploads/'.$folder->id.'-'.(new \DateTime)->format('YmdHisu').'-'.$user->id.'.zip';
       $zip=new \ZipArchive();
       $zip->open($zipPath,\ZIPARCHIVE::CREATE);
       foreach($folder->files as $file)
@@ -89,9 +109,9 @@ class FileController extends Controller
     }
 
 
-    public function  deleteFile(Request $request,$file_id)
+    public function  deleteFile(Request $request,$folder_id,$file_id)
     {
-      $file = (new File)->findOrFail($file_id);
+      $file = (new File)->findOrFailByHashid($file_id);
 
       $path=storage_path().'/app/'.$file->path;
       unlink($path);
@@ -104,7 +124,7 @@ class FileController extends Controller
 
     public function  deleteAll(Request $request,$folder_id)
     {
-      $folder = (new Folder)->findOrFail($folder_id);
+      $folder = (new Folder)->findOrFailByHashid($folder_id);
       $folder->deleteAllFiles();
 
 

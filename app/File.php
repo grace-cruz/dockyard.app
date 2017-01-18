@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Hashable;
 use Illuminate\Database\Eloquent\Model;
 
 class File extends Model
 {
+  use Hashable;
+  
     protected $table='files';
 
     public $timestamps= true;

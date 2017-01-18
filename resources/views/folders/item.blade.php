@@ -16,16 +16,16 @@
               @if ($folder->files->count() > 0)
                 @foreach ($folder->files as $file)
                 	<li class="list-group-item">
-                    <a href="{{ url('/folders/' . $file->folder_id . '/download/' . $file->id) }}" target="_blank">
+                    <a href="{{ url('/folders/' . $folder->getHashid() . '/download/' . $file->getHashid())}}" target="_blank">
                       {{ $file->name }}
                     </a>
                     <span class="pull-right">
-                      <a href="{{ url('/folders/' . $folder->id . '/download/' . $file->id) }}" title="Download" target="_blank">
+                      <a href="{{ url('/folders/' . $folder->getHashid() . '/download/' . $file->getHashid()) }}" title="Download" target="_blank">
                         <span class="glyphicon glyphicon-cloud-download"></span>
                       </a>
                       @if (Auth::user()->admin)
                         &nbsp;
-                        <a href="{{ url('/folders/' . $folder->id . '/delete/' . $file->id) }}" title="Delete">
+                        <a href="{{ url('/folders/' . $folder->getHashid() . '/delete/' . $file->getHashid()) }}" title="Delete">
                           <span class="glyphicon glyphicon-remove"></span>
                         </a>
                       @endif
@@ -40,25 +40,25 @@
             </div>
             <div class="col-md-12">
               @if (Auth::user()->admin)
-                <a class="btn btn-primary" href="{{ url('/folders/' . $folder->id . '/upload') }}">
+                <a class="btn btn-primary" href="{{ url('/folders/' . $folder->getHashid() . '/upload') }}">
                   Upload
                 </a>
                 &nbsp;
               @endif
               @if ($folder->files->count() > 0)
-                <a class="btn btn-primary" href="{{ url('/folders/' . $folder->id . '/download/zip') }}">
+                <a class="btn btn-primary" href="{{ url('/folders/' . $folder->getHashid() . '/download/zip') }}">
                   Download Zip
                 </a>
               @endif
               @if (Auth::user()->admin && $folder->files->count() > 0)
                 &nbsp;
-                <a class="btn btn-danger" href="{{ url('/folders/' . $folder->id . '/delete/all') }}">
+                <a class="btn btn-danger" href="{{ url('/folders/' . $folder->getHashid() . '/delete/all') }}">
                   Delete all files
                 </a>
               @endif
               @if (Auth::user()->admin)
                 &nbsp;
-                <a class="btn btn-danger" href="{{ url('/folders/' . $folder->id . '/delete') }}">
+                <a class="btn btn-danger" href="{{ url('/folders/' . $folder->getHashid() . '/delete') }}">
                   Delete folder
                 </a>
               @endif

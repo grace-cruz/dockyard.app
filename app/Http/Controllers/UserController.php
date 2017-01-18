@@ -46,20 +46,20 @@ class UserController extends Controller
 
     public function editUser(Request $request,$user_id)
     {
-      $user = (new User)->findOrFail($user_id);
+      $user = (new User)->findOrFailByHashid($user_id);
       return view('users.editor',[
         'user' =>$user,
         'title' =>'Edit User',
         'logged_in_user' =>$user->id === $request->user()->id,
         'form_url'=>"/users/$user_id",
-        'delete_url' =>"user/$user_id/delete",
+        'delete_url' =>"users/$user_id/delete",
 
       ]);
     }
 
     public function updateUser(UpdateUser $request,$user_id)
     {
-      $user = (new User)->findOrFail($user_id);
+      $user = (new User)->findOrFailByHashid($user_id);
 
       $user->name = $request->name;
       $user->email = $request->email;
@@ -73,7 +73,7 @@ class UserController extends Controller
 
     public function deleteUser(Request $request, $user_id)
     {
-      $user = (new User)->findOrFail($user_id);
+      $user = (new User)->findOrFailByHashid($user_id);
       $user->delete();
 
       $request->session()->flash('status','User deleted successfully');
@@ -98,7 +98,7 @@ class UserController extends Controller
       $user->save();
 
       $request->session()->flash('status','User added successfully');
-      return redirect("/users/$user->id");
+      return redirect('/users/' . $user->getHashid());
     }
 
 }

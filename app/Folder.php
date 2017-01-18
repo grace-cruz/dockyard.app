@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Hashable;
 use Illuminate\Database\Eloquent\Model;
 
 class Folder extends Model
 {
+  use Hashable;
+  
     protected $table = 'folders';
 
     public $timestamps = true;

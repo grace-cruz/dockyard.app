@@ -16,17 +16,17 @@
               @if ($users->count() > 0)
                 @foreach ($users as $user)
                 	<li class="list-group-item">
-                    <a href="{{ url('/users/' . $user->id) }}">
+                    <a href="{{ url('/users/' . $user->getHashid()) }}">
                       {{ $user->name }}
                     </a>
                     @if (Auth::user()->admin)
                       <span class="pull-right">
-                        <a href="{{ url('/users/' . $user->id) }}" title="Edit">
+                        <a href="{{ url('/users/' . $user->getHashid()) }}" title="Edit">
                           <span class="glyphicon glyphicon-edit"></span>
                         </a>
                         @if (Auth::user()->id !== $user->id)
                           &nbsp;
-                          <a href="{{ url('/users/' . $user->id . '/delete') }}" title="Delete">
+                          <a href="{{ url('/users/' . $user->getHashid() . '/delete') }}" title="Delete">
                             <span class="glyphicon glyphicon-remove"></span>
                           </a>
                         @endif

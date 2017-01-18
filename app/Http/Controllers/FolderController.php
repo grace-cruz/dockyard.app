@@ -25,7 +25,7 @@ class FolderController extends Controller
     public function showFolder(Request $request,$folder_id)
     {
       $user=$request->user();
-      $folder= (new Folder)->findOrFail($folder_id);
+      $folder = (new Folder)->findOrFailByHashid($folder_id);
 
       return view('folders.item',[
         'user' => $user,
@@ -36,7 +36,7 @@ class FolderController extends Controller
     public function editFolder(Request $request, $folder_id)
     {
       $user=$request->user();
-      $folder=(new Folder)->findOrFail($folder_id);
+      $folder = (new Folder)->findOrFailByHashid($folder_id);
 
       //TODO
       $users = (new User)->where('admin',false)->get();
@@ -54,7 +54,7 @@ class FolderController extends Controller
 
     public function updateFolder(updateFolder $request, $folder_id)
     {
-      $folder=(new Folder)->findOrFail($folder_id);
+      $folder = (new Folder)->findOrFailByHashid($folder_id);
       $folder->name = $request->name;
       $folder->save();
 
@@ -69,7 +69,7 @@ class FolderController extends Controller
 
     public function deleteFolder(Request $request, $folder_id)
     {
-      $folder=(new Folder)->findOrFail($folder_id);
+      $folder = (new Folder)->findOrFailByHashid($folder_id);
       $folder->deleteAllFiles();
       $folder->delete();
 
@@ -105,6 +105,6 @@ class FolderController extends Controller
       $folder->users()->attach($request->users);
 
       $request->session()->flash('status','Folder added successfully');
-      return redirect("/folders/$folder->id/edit");
+      return redirect('/folders/' . $folder->getHashid() . '/edit');
     }
 }

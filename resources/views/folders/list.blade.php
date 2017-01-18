@@ -18,20 +18,20 @@
               @if ($folders->count() > 0)
                 @foreach ($folders as $folder)
                 	<li class="list-group-item">
-                    <a href="{{ url('/folders/' . $folder->id) }}">
+                    <a href="{{ url('/folders/' . $folder->getHashid()) }}">
                       {{ $folder->name }}
                     </a>
                     @if (Auth::user()->admin)
                       <span class="pull-right">
-                        <a href="{{ url('/folders/' . $folder->id . '/edit') }}" title="Edit">
+                        <a href="{{ url('/folders/' . $folder->getHashid() . '/edit') }}" title="Edit">
                           <span class="glyphicon glyphicon-edit"></span>
                         </a>
                         &nbsp;
-                        <a href="{{ url('/folders/' . $folder->id . '/upload') }}" title="Upload">
+                        <a href="{{ url('/folders/' . $folder->getHashid() . '/upload') }}" title="Upload">
                           <span class="glyphicon glyphicon-cloud-upload"></span>
                         </a>
                         &nbsp;
-                        <a href="{{ url('/folders/' . $folder->id . '/delete') }}" title="Delete">
+                        <a href="{{ url('/folders/' . $folder->getHashid() . '/delete') }}" title="Delete">
                           <span class="glyphicon glyphicon-remove"></span>
                         </a>
                       </span>

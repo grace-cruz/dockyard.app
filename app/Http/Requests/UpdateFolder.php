@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateFolder extends FormRequest
@@ -23,7 +24,7 @@ class UpdateFolder extends FormRequest
      */
     public function rules()
     {
-      $folder_id = isset($this->folder_id)? $this->folder_id : null;
+      $$folder_id = isset($this->folder_id) ? Hashids::decode($this->folder_id)[0] : null;
 
         return [
             'name' => 'required|unique:folders,name,'.$folder_id.'|max:255'

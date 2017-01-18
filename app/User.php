@@ -2,11 +2,13 @@
 
 namespace App;
 
+use App\Hashable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    use Hashable;
     use Notifiable;
 
     /**
@@ -39,6 +41,6 @@ class User extends Authenticatable
       return $this->hasMany('App\Download');
     }
 
-    
+
 
 }
