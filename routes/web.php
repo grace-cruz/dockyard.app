@@ -59,4 +59,4 @@ Route::group(['middleware'=>['folder']],function(){
 
 //
 
-// Route::get('/home', 'HomeController@index');
+ Route::get('/home', 'HomeController@index');

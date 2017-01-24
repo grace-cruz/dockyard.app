@@ -8,6 +8,7 @@ use App\Http\Requests\UploadFile;
 use App\Download;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Vinkla\Hashids\Facades\Hashids;
 
 class FileController extends Controller
 {
